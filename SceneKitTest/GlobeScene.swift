@@ -16,7 +16,7 @@ class GlobeScene: SCNScene {
     var ambientLightNode: SCNNode
     var globeNode: SCNNode
 
-    init() {
+    override init() {
         
 		self.camera = SCNCamera()
 		self.camera.zNear = 0.01
@@ -40,28 +40,28 @@ class GlobeScene: SCNScene {
 
 		self.globeNode = SCNNode()
 		let theGlobeGeometry = SCNSphere(radius: 0.5)
-		theGlobeGeometry.firstMaterial.diffuse.contents = UIImage(named:"earth_diffuse.jpg")
-		theGlobeGeometry.firstMaterial.ambient.contents = UIImage(named:"earth_ambient2.jpeg")
-//		theGlobeGeometry.firstMaterial.ambient.contents = UIImage(named:"earth_ambient.jpg")
-		theGlobeGeometry.firstMaterial.specular.contents = UIImage(named:"earth_specular.jpg")
-        theGlobeGeometry.firstMaterial.emission.contents = nil
-        theGlobeGeometry.firstMaterial.transparent.contents = nil
-        theGlobeGeometry.firstMaterial.reflective.contents = nil
-        theGlobeGeometry.firstMaterial.multiply.contents = nil
-		theGlobeGeometry.firstMaterial.normal.contents = UIImage(named:"earth_normal.jpg")
+		theGlobeGeometry.firstMaterial?.diffuse.contents = UIImage(named:"earth_diffuse.jpg")
+		theGlobeGeometry.firstMaterial?.ambient.contents = UIImage(named:"earth_ambient2.jpeg")
+//		theGlobeGeometry.firstMaterial?.ambient.contents = UIImage(named:"earth_ambient.jpg")
+		theGlobeGeometry.firstMaterial?.specular.contents = UIImage(named:"earth_specular.jpg")
+        theGlobeGeometry.firstMaterial?.emission.contents = nil
+        theGlobeGeometry.firstMaterial?.transparent.contents = nil
+        theGlobeGeometry.firstMaterial?.reflective.contents = nil
+        theGlobeGeometry.firstMaterial?.multiply.contents = nil
+		theGlobeGeometry.firstMaterial?.normal.contents = UIImage(named:"earth_normal.jpg")
 
 		let theGlobeModelNode = SCNNode(geometry: theGlobeGeometry)
 		self.globeNode.addChildNode(theGlobeModelNode)
 
-		let theCloudGeometry = SCNSphere(radius:0.501)
-        theCloudGeometry.firstMaterial.diffuse.contents = nil
-        theCloudGeometry.firstMaterial.ambient.contents = nil
-        theCloudGeometry.firstMaterial.specular.contents = nil
-        theCloudGeometry.firstMaterial.emission.contents = nil
-        theCloudGeometry.firstMaterial.transparent.contents = UIImage(named:"earth_clouds.png")
-        theCloudGeometry.firstMaterial.reflective.contents = nil
-        theCloudGeometry.firstMaterial.multiply.contents = nil
-        theCloudGeometry.firstMaterial.normal.contents = nil
+        let theCloudGeometry = SCNSphere(radius:0.505)
+        theCloudGeometry.firstMaterial?.diffuse.contents = nil
+        theCloudGeometry.firstMaterial?.ambient.contents = nil
+        theCloudGeometry.firstMaterial?.specular.contents = nil
+        theCloudGeometry.firstMaterial?.emission.contents = nil
+        theCloudGeometry.firstMaterial?.transparent.contents = UIImage(named:"earth_clouds.png")
+        theCloudGeometry.firstMaterial?.reflective.contents = nil
+        theCloudGeometry.firstMaterial?.multiply.contents = nil
+        theCloudGeometry.firstMaterial?.normal.contents = nil
 
 		let theCloudModelNode = SCNNode(geometry: theCloudGeometry)
         self.globeNode.addChildNode(theCloudModelNode)
@@ -69,14 +69,28 @@ class GlobeScene: SCNScene {
         // animate the 3d object
         let animation: CABasicAnimation = CABasicAnimation(keyPath: "rotation")
         animation.toValue = NSValue(SCNVector4: SCNVector4(x: 1, y: 1, z: 0, w: Float(M_PI)*2))
-        animation.duration = 5
+        animation.duration = 500
         animation.repeatCount = MAXFLOAT //repeat forever
-        globeNode.addAnimation(animation, forKey: nil)
+        self.globeNode.addAnimation(animation, forKey: nil)
+        
+        
+        // animate the 3d object
+        let cloudAnimation: CABasicAnimation = CABasicAnimation(keyPath: "rotation")
+        cloudAnimation.toValue = NSValue(SCNVector4: SCNVector4(x: -1, y: 2, z: 0, w: Float(M_PI)*2))
+        cloudAnimation.duration = 1050
+        cloudAnimation.repeatCount = .infinity //repeat forever
+        theCloudModelNode.addAnimation(cloudAnimation, forKey: nil)
+
+        
 
         super.init()
 
         self.rootNode.addChildNode(self.cameraNode)
         self.rootNode.addChildNode(self.ambientLightNode)
         self.rootNode.addChildNode(self.globeNode)
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

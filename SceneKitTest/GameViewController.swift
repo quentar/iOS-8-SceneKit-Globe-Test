@@ -21,7 +21,7 @@ class GameViewController: UIViewController {
         // create and add a light to the scene
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
-        lightNode.light.type = SCNLightTypeOmni
+        lightNode.light?.type = SCNLightTypeOmni
         lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
         scene.rootNode.addChildNode(lightNode)
 
@@ -51,7 +51,7 @@ class GameViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
         let gestureRecognizers = NSMutableArray()
         gestureRecognizers.addObject(tapGesture)
-        gestureRecognizers.addObjectsFromArray(scnView.gestureRecognizers)
+        if let arr = scnView.gestureRecognizers { gestureRecognizers.addObjectsFromArray(arr) }
         scnView.gestureRecognizers = gestureRecognizers
     }
     
@@ -64,12 +64,12 @@ class GameViewController: UIViewController {
         let hitResults = scnView.hitTest(p, options: nil)
         
         // check that we clicked on at least one object
-        if hitResults.count > 0 {
+        if hitResults?.count > 0 {
             // retrieved the first clicked object
-            let result: AnyObject! = hitResults[0]
+            let result: AnyObject! = hitResults?[0]
             
             // get its material
-            let material = result.node!.geometry.firstMaterial
+            let material = result.node!.geometry?.firstMaterial
             
             // highlight it
             SCNTransaction.begin()
@@ -80,12 +80,12 @@ class GameViewController: UIViewController {
                 SCNTransaction.begin()
                 SCNTransaction.setAnimationDuration(0.5)
                 
-                material.emission.contents = UIColor.blackColor()
+                material?.emission.contents = UIColor.blackColor()
                 
                 SCNTransaction.commit()
             }
             
-            material.emission.contents = UIColor.redColor()
+            material?.emission.contents = UIColor.redColor()
             
             SCNTransaction.commit()
         }
@@ -97,9 +97,9 @@ class GameViewController: UIViewController {
     
     override func supportedInterfaceOrientations() -> Int {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return Int(UIInterfaceOrientationMask.AllButUpsideDown.toRaw())
+            return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
         } else {
-            return Int(UIInterfaceOrientationMask.All.toRaw())
+            return Int(UIInterfaceOrientationMask.All.rawValue)
         }
     }
     
