@@ -33,7 +33,7 @@ class GameViewController: UIViewController {
 //        scene.rootNode.addChildNode(ambientLightNode)
 
         // retrieve the SCNView
-        let scnView = self.view as SCNView
+        let scnView = self.view as! SCNView
         
         // set the scene to the view
         scnView.scene = scene
@@ -52,21 +52,22 @@ class GameViewController: UIViewController {
         let gestureRecognizers = NSMutableArray()
         gestureRecognizers.addObject(tapGesture)
         if let arr = scnView.gestureRecognizers { gestureRecognizers.addObjectsFromArray(arr) }
-        scnView.gestureRecognizers = gestureRecognizers
+        let gestureRecognizersTyped = NSArray(array:gestureRecognizers) as! Array<UITapGestureRecognizer>   //cast mutable array to make compiler happy 
+        scnView.gestureRecognizers = gestureRecognizersTyped
     }
     
     func handleTap(gestureRecognize: UIGestureRecognizer) {
         // retrieve the SCNView
-        let scnView = self.view as SCNView
+        let scnView = self.view as! SCNView
         
         // check what nodes are tapped
         let p = gestureRecognize.locationInView(scnView)
         let hitResults = scnView.hitTest(p, options: nil)
         
         // check that we clicked on at least one object
-        if hitResults?.count > 0 {
+        if hitResults.count > 0 {
             // retrieved the first clicked object
-            let result: AnyObject! = hitResults?[0]
+            let result: AnyObject! = hitResults[0]
             
             // get its material
             let material = result.node!.geometry?.firstMaterial
@@ -95,11 +96,11 @@ class GameViewController: UIViewController {
         return true
     }
     
-    override func supportedInterfaceOrientations() -> Int {
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+            return UIInterfaceOrientationMask.AllButUpsideDown
         } else {
-            return Int(UIInterfaceOrientationMask.All.rawValue)
+            return UIInterfaceOrientationMask.All
         }
     }
     

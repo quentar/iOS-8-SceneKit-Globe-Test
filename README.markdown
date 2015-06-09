@@ -1,6 +1,6 @@
 # iOS-8-SceneKit-Globe-Test
 
-Forked and changed to syntax of xCode 6.1 GM.
+Forked and changed to swift 2.0 syntax as of June 10 , 2015.
 
 iOS 8 Scene Kit (swift!) project showing a spinning (earth) globe with diffuse, ambient, specular and normal materials. Also cloud layer. Yum.
 
